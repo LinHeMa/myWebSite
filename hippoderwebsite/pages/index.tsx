@@ -6,6 +6,7 @@ import {
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { atom, useAtom } from "jotai";
 import type { MenuProps } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 
@@ -41,15 +42,18 @@ const items: MenuItem[] = [
   ]),
   getItem("Files", "9", <FileOutlined />),
 ];
-
+const clickedMenuKeyAtom = atom(1);
 const Home: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  console.log(clickedMenuKeyAtom);
+  const [clickedMenuKey, setClickedMenuKey] = useAtom(clickedMenuKeyAtom);
   const onClick: MenuProps["onClick"] = (e) => {
     console.log("click ", e);
+    setClickedMenuKey(Number(e.key));
   };
 
   return (
@@ -84,7 +88,7 @@ const Home: React.FC = () => {
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+            <Breadcrumb.Item>{clickedMenuKey}</Breadcrumb.Item>
           </Breadcrumb>
           <div
             style={{
@@ -93,7 +97,7 @@ const Home: React.FC = () => {
               background: colorBgContainer,
             }}
           >
-            Bill is a cat.
+            Bill is a cat
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
